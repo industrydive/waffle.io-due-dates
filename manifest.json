@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Waffle Due Dates",
+  "description": "Improves Waffle.io with recognition for due dates",
+  "version": "1.0",
+  "permissions": [
+    "https://waffle.io/*",
+    "http://waffle.io/*"
+  ],
+  "content_scripts": [ {
+      "css": [ "css/styles.css" ],
+      "js": [ "js/jquery-3.1.0.min.js", "js/moment.min.js", "js/content.js" ],
+      "matches": [
+        "https://waffle.io/*",
+        "http://waffle.io/*"
+      ],
+      "run_at": "document_start"
+    } ]
+}

@@ -1,0 +1,9 @@
+.dive-due-date {
+	color: black;
+	background-color: pink;
+}
+
+.dive-due-date.dive-due-soon {
+	color: red;
+	font-weight: bold;
+}
