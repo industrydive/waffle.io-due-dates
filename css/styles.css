@@ -7,3 +7,8 @@
 	color: red;
 	font-weight: bold;
 }
+
+.dive-due-date.dive-due-soon::before {
+	/* clock glyph from http://www.fileformat.info/info/unicode/char/1f550/index.htm */
+	content: "\01F550   ";
+}

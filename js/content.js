@@ -21,9 +21,9 @@ function renderDueDate(card, dueMoment) {
     // renders a due date for a given card (DOM element) and a given momentjs date
     var $card = $(card);
     var $duePill = $("<span class='label-pill dive-due-date'/>");
-    // alarm clock glyph from http://www.fileformat.info/info/unicode/char/23f0/index.htm
-    $duePill.html("&#9200; Due "+dueMoment.fromNow());
+    $duePill.html("Due "+dueMoment.fromNow());
     if (dueMoment <= moment().add(3, "days")) {
+        // Stuff due "soon" gets special styling
         $duePill.addClass("dive-due-soon");
     }
     $card.find(".pills").prepend($duePill);
@@ -54,4 +54,11 @@ function setUpEvents() {
     });
 }
 
+// Customize momentjs; want to discourage display of units smaller than a day
+// see http://momentjs.com/docs/#/customization/relative-time-threshold/
+moment.relativeTimeThreshold('s', 1);
+moment.relativeTimeThreshold('m', 1);
+moment.relativeTimeThreshold('h', 1);
+
+// Kick off the process of waiting for cards to load so we can mess with them
 doStuffOnceCardsLoad();
