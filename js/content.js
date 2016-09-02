@@ -6,7 +6,7 @@ function processCards(){
         var dueMatch = dueRegexp.exec(issueTitle);
         if (dueMatch) {  // if there is a due date match in this issue title...
             var dueDate = dueMatch[1];  // stsring of the due date like "9/1"
-            var dueMoment = moment(dueDate, "MM/DD");  // momentjs object of the due date
+            var dueMoment = moment(dueDate, "MM/DD").endOf('day');  // momentjs object of the due date
             // console.log(issueTitle, dueDate, dueMoment.fromNow());
             renderDueDate(this, dueMoment);
         }
@@ -21,11 +21,23 @@ function renderDueDate(card, dueMoment) {
     // renders a due date for a given card (DOM element) and a given momentjs date
     var $card = $(card);
     var $duePill = $("<span class='label-pill dive-due-date'/>");
-    $duePill.html("Due "+dueMoment.fromNow());
-    if (dueMoment <= moment().add(3, "days")) {
-        // Stuff due "soon" gets special styling
-        $duePill.addClass("dive-due-soon");
+    var dueWhen = dueMoment.fromNow();
+    if (dueMoment < moment()) {
+        // already late
+        $duePill.addClass("dive-due-past");
     }
+    else {
+        if ((dueMoment < moment().add(1, "days")) && (dueMoment > moment())) {
+            // special case when it's less than a day away, but not yet passed. i.e. today
+            dueWhen = "today";
+            $duePill.addClass("dive-due-today");
+        }
+        else if (dueMoment <= moment().add(3, "days")) {
+            // Stuff due "soon" gets special styling
+            $duePill.addClass("dive-due-soon");
+        }
+    }
+    $duePill.html("Due "+dueWhen);
     $card.find(".pills").prepend($duePill);
 }
 
@@ -53,12 +65,6 @@ function setUpEvents() {
         processCards();
     });
 }
-
-// Customize momentjs; want to discourage display of units smaller than a day
-// see http://momentjs.com/docs/#/customization/relative-time-threshold/
-moment.relativeTimeThreshold('s', 1);
-moment.relativeTimeThreshold('m', 1);
-moment.relativeTimeThreshold('h', 1);
 
 // Kick off the process of waiting for cards to load so we can mess with them
 doStuffOnceCardsLoad();

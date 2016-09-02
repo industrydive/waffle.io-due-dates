@@ -1,14 +1,28 @@
 .dive-due-date {
-	color: black;
-	background-color: pink;
+    color: black;
+    background-color: pink;
 }
 
 .dive-due-date.dive-due-soon {
-	color: red;
-	font-weight: bold;
+    color: red;
+    font-weight: bold;
 }
 
-.dive-due-date.dive-due-soon::before {
-	/* clock glyph from http://www.fileformat.info/info/unicode/char/1f550/index.htm */
-	content: "\01F550   ";
+.dive-due-date.dive-due-today::before, .dive-due-date.dive-due-soon::before {
+    /* Unicode Character 'CLOCK FACE ONE OCLOCK' (U+1F550) */
+    /* Unicode Character 'NO-BREAK SPACE' (U+00A0) */
+    content: "\01F550\00A0";
 }
+
+.dive-due-date.dive-due-today, .dive-due-date.dive-due-past {
+    color: red;
+    font-weight: bold;
+    border-color: black;
+}
+
+.dive-due-date.dive-due-past::before {
+    /* Unicode Character 'WARNING SIGN' (U+26A0) */
+    /* Unicode Character 'NO-BREAK SPACE' (U+00A0) */
+    content: "\26A0\00A0";
+}
+
