@@ -41,30 +41,16 @@ function renderDueDate(card, dueMoment) {
     $card.find(".pills").prepend($duePill);
 }
 
-function doStuffOnceCardsLoad(try_count) {
-    if (!try_count) try_count = 1; // try_count not specificed, assume first try
-    if (try_count > 20) return; // give up trying after 10 sec delay (20 attempts * 500ms = 10000ms)
 
-    // $(".loading-mask").is(":visible")
-    if ($(".card").length==0) {
-        // not loaded yet; try again in 1/2 second.
-        setTimeout(function() {
-            doStuffOnceCardsLoad(try_count + 1);
-        }, 500);
-    } else {
-        // it loaded!
-        processCards();
-        setUpEvents();
+var subtree_being_modified = false;
+$(document).on('DOMSubtreeModified', '.board', function() {
+    // DOMSubtreeModified is an evil, deprecated event that totally still works anyway.
+    // Only catch is it fires many times during a refesh so we need to throttle/debounce it
+    if (subtree_being_modified !== false) {
+        clearTimeout(subtree_being_modified);
     }
-}
-
-function setUpEvents() {
-    $(".card textarea").blur(function(){
-        // Any time any textarea blurs (focus is lost) nuke all due date rendering and rebuild it all
+    subtree_being_modified = setTimeout(function() {
         clearAllDueDates();
         processCards();
-    });
-}
-
-// Kick off the process of waiting for cards to load so we can mess with them
-doStuffOnceCardsLoad();
+    }, 100);
+});
