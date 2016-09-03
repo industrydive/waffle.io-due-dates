@@ -1,6 +1,7 @@
 .dive-due-date {
     color: black;
     background-color: pink;
+    box-shadow:0px 0px 0px 1px black inset;
 }
 
 .dive-due-date.dive-due-soon {
@@ -11,18 +12,18 @@
 .dive-due-date.dive-due-today::before, .dive-due-date.dive-due-soon::before {
     /* Unicode Character 'CLOCK FACE ONE OCLOCK' (U+1F550) */
     /* Unicode Character 'NO-BREAK SPACE' (U+00A0) */
-    content: "\01F550\00A0";
+    content: "\01F550\00A0\00A0";
 }
 
 .dive-due-date.dive-due-today, .dive-due-date.dive-due-past {
     color: red;
     font-weight: bold;
-    border-color: black;
 }
 
 .dive-due-date.dive-due-past::before {
     /* Unicode Character 'WARNING SIGN' (U+26A0) */
     /* Unicode Character 'NO-BREAK SPACE' (U+00A0) */
-    content: "\26A0\00A0";
+    content: "\26A0\00A0\00A0";
 }
+
 
