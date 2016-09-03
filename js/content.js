@@ -23,20 +23,16 @@ function renderDueDate(card, dueMoment) {
     var $card = $(card);
     var $duePill = $("<span class='label-pill dive-due-date'/>");
     var dueWhen = dueMoment.fromNow();
-    if (dueMoment < moment()) {
+    if ((dueMoment < moment().add(1, "days")) && (dueMoment > moment())) {
+        // check for stuff due today
+        dueWhen = "today";
+        $duePill.addClass("dive-due-today");
+    } else if((dueMoment <= moment().endOf('day').add(3, "days")) && (dueMoment > moment())) {
+        // Stuff due "soon" gets special styling
+        $duePill.addClass("dive-due-soon");
+    } else if (dueMoment < moment()) {
         // already late
         $duePill.addClass("dive-due-past");
-    }
-    else {
-        if ((dueMoment < moment().add(1, "days")) && (dueMoment > moment())) {
-            // special case when it's less than a day away, but not yet passed. i.e. today
-            dueWhen = "today";
-            $duePill.addClass("dive-due-today");
-        }
-        else if (dueMoment <= moment().add(3, "days")) {
-            // Stuff due "soon" gets special styling
-            $duePill.addClass("dive-due-soon");
-        }
     }
     $duePill.html("Due "+dueWhen);
     $card.find(".pills").prepend($duePill);
