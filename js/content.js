@@ -1,13 +1,14 @@
 function processCards(){
-    // iterates through every card, looks for due data "due MM/DD" and renders them
     var dueRegexp = /due (\d\d?\/\d\d?)/i
-    $(".card").each(function(){
+    // iterates through cards looking for strings like "due MM/DD" and call renderDueDate on them
+    // Selects only cards within any column except for the column containing an "archive-all" button
+    //  because that column is the "Done" column and it's silly to show due dates on done items.
+    $(".column:not(*:has(.archive-all)) .card").each(function(){
         var issueTitle = $(this).find(".title").val();
         var dueMatch = dueRegexp.exec(issueTitle);
         if (dueMatch) {  // if there is a due date match in this issue title...
             var dueDate = dueMatch[1];  // stsring of the due date like "9/1"
             var dueMoment = moment(dueDate, "MM/DD").endOf('day');  // momentjs object of the due date
-            // console.log(issueTitle, dueDate, dueMoment.fromNow());
             renderDueDate(this, dueMoment);
         }
     });
@@ -41,16 +42,21 @@ function renderDueDate(card, dueMoment) {
     $card.find(".pills").prepend($duePill);
 }
 
+function pageWasJustModified() {
+    // this is what actually gets called when the page is modified. 
+    clearAllDueDates();
+    processCards();
+}
 
-var subtree_being_modified = false;
+var subtreeModifiedTimer = false;
 $(document).on('DOMSubtreeModified', '.board', function() {
     // DOMSubtreeModified is an evil, deprecated event that totally still works anyway.
     // Only catch is it fires many times during a refesh so we need to throttle/debounce it
-    if (subtree_being_modified !== false) {
-        clearTimeout(subtree_being_modified);
+    // We only call pageWasJustMoved at most once every 1/10th of a second.
+    if (subtreeModifiedTimer !== false) {
+        // cancel any existing timers
+        clearTimeout(subtreeModifiedTimer);
     }
-    subtree_being_modified = setTimeout(function() {
-        clearAllDueDates();
-        processCards();
-    }, 100);
+    // ...and start a new one for 100ms from now
+    subtreeModifiedTimer = setTimeout(pageWasJustModified, 100);
 });
