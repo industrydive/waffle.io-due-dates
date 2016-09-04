@@ -12,10 +12,17 @@ function processCards(){
             renderDueDate(this, dueMoment);
         }
     });
+    // add the counts
+    $(".column:has(.dive-due-date)").each(function(){
+        var $column = $(this);
+        if ($column.find(".dive-due-date").length > 0) {
+            $column.find(".column-text").addClass("dive-column-label");
+        }
+    })
 }
 
 function clearAllDueDates() {
-    $(".dive-due-date").remove();
+    $(".dive-due-date, .dive-column-label").remove();
 }
 
 function renderDueDate(card, dueMoment) {
