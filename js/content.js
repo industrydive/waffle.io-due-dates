@@ -40,15 +40,21 @@ function renderDueDate(card, dueMoment) {
 
 function pageWasJustModified() {
     // this is what actually gets called when the page is modified. 
+    ignoreChanges = true;
     clearAllDueDates();
     processCards();
+    ignoreChanges = false;
 }
 
-var subtreeModifiedTimer = false;
+var subtreeModifiedTimer = false, ignoreChanges = false;
 $(document).on('DOMSubtreeModified', '.board', function() {
     // DOMSubtreeModified is an evil, deprecated event that totally still works anyway.
     // Only catch is it fires many times during a refesh so we need to throttle/debounce it
     // We only call pageWasJustMoved at most once every 1/10th of a second.
+    if (ignoreChanges) {
+        // ignore changes made as part of *our* updates so we don't get stuck in a loop
+        return;
+    }
     if (subtreeModifiedTimer !== false) {
         // cancel any existing timers
         clearTimeout(subtreeModifiedTimer);
