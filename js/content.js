@@ -1,5 +1,5 @@
 function processCards(){
-    var dueRegexp = /due (\d\d?\/\d\d?)/i
+    var dueRegexp = /^(?:.*?\W)?due (\d\d?\/\d\d?)/i
     // iterates through cards looking for strings like "due MM/DD" and call renderDueDate on them
     // Selects only cards within any column except for the column containing an "archive-all" button
     //  because that column is the "Done" column and it's silly to show due dates on done items.
