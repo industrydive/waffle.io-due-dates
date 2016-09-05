@@ -54,6 +54,7 @@ function pageWasJustModified() {
     ignoreChanges = false;
 }
 
+// Catch changes to page structure (i.e. card refresh or initial load)
 var subtreeModifiedTimer = false, ignoreChanges = false;
 $(document).on('DOMSubtreeModified', '.board', function() {
     // DOMSubtreeModified is an evil, deprecated event that totally still works anyway.
@@ -70,3 +71,6 @@ $(document).on('DOMSubtreeModified', '.board', function() {
     // ...and start a new one for 100ms from now
     subtreeModifiedTimer = setTimeout(pageWasJustModified, 100);
 });
+
+// Also want to trigger card update when you edit the text on the card.
+$(document).on('blur', '.card textarea', pageWasJustModified);
