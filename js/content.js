@@ -22,7 +22,8 @@ function processCards(){
 }
 
 function clearAllDueDates() {
-    $(".dive-due-date, .dive-column-label").remove();
+    $(".dive-due-date").remove();
+    $(".dive-column-label").removeClass("dive-column-label");
 }
 
 function renderDueDate(card, dueMoment) {
