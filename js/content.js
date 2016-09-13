@@ -30,7 +30,7 @@ function renderDueDate(card, dueMoment) {
     // renders a due date for a given card (DOM element) and a given momentjs date
     var $card = $(card);
     var $duePill = $("<span class='label-pill dive-due-date'/>");
-    var dueWhen = dueMoment.fromNow();
+    var dueWhen = dueMoment.from(moment().endOf('day'));  // count from end of the day
     if ((dueMoment < moment().add(1, "days")) && (dueMoment > moment())) {
         // check for stuff due today
         dueWhen = "today";
