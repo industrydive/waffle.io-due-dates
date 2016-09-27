@@ -1,5 +1,5 @@
 function processCards(){
-    var dueRegexp = /^(?:.*?\W)?due (\d\d?\/\d\d?)/i
+    var dueRegexp = /^(?:.*?\W)?due (\d\d?\/\d\d?(?:\/\d{2,4})?)/i
     // iterates through cards looking for strings like "due MM/DD" and call renderDueDate on them
     // Selects only cards within any column except for the column containing an "archive-all" button
     //  because that column is the "Done" column and it's silly to show due dates on done items.
@@ -7,12 +7,12 @@ function processCards(){
         var issueTitle = $(this).find(".title").val();
         var dueMatch = dueRegexp.exec(issueTitle);
         if (dueMatch) {  // if there is a due date match in this issue title...
-            var dueDate = dueMatch[1];  // stsring of the due date like "9/1"
-            var dueMoment = moment(dueDate, "MM/DD").endOf('day');  // momentjs object of the due date
+            var dueDate = dueMatch[1];  // stsring of the due date like "9/1" or "1/1/14" or "10/10/2016"
+            var dueMoment = moment(dueDate, "MM/DD/YYYY").endOf('day');  // momentjs object of the due date
             renderDueDate(this, dueMoment);
         }
     });
-    // add the counts
+    // add the column header labels
     $(".column:has(.dive-due-date)").each(function(){
         var $column = $(this);
         if ($column.find(".dive-due-date").length > 0) {
